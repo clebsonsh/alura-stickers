@@ -1,18 +1,15 @@
-## Getting Started
+# Alura Stickers
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## Projeto da Imersão Java da Alura
 
-## Folder Structure
+Esse APP usa a API do IMDb pra gerar Stickers par ao Whatsapp
 
-The workspace contains two folders by default, where:
+### Como rodar
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+- copie arquivor env.properties.example para env.proterties
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+> `cp env.properties.example env.properties`
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+- Abra o arquibo env.properties e coloque a sua API_KEY
 
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+... Até o momento o APP só pega os filmes mais populares e mostra na tela
