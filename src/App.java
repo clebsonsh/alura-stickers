@@ -1,13 +1,14 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.Map;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 public class App {
@@ -35,7 +36,7 @@ public class App {
         // URI endereco = URI.create(url + API_KEY);
 
         // Usando um API alternativa por hora
-        String url = "https://alura-filmes.herokuapp.com/conteudos";
+        String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java/api/TopMovies.json";
         URI endereco = URI.create(url);
 
         // Faz o GET dos dados da API
@@ -53,22 +54,18 @@ public class App {
         List<Map<String, String>> listaDeFilmes = parser.parse(body);
 
         // Exibir e manipular os dados
+        var geradora = new GeradoraDeFigurinhas();
         for (Map<String, String> filme : listaDeFilmes) {
-            // Alguns filmes não tem nota, então estou colocando 0 para os mesmos
-            String rating = filme.get("imDbRating") != ""
-                    ? filme.get("imDbRating")
-                    : "0";
+            String titulo = filme.get("title");
 
-            System.out.println("Título: \033[1m" + filme.get("title") + "\033[0m");
-            System.out.println("Poster: \033[1m" + filme.get("image") + "\033[0m");
-            System.out.println("\u001B[45mClasificação: " + rating + "\u001B[0m");
+            String urlImagem = filme.get("image");
+            String nomeArquivo = titulo + ".png";
 
-            for (int i = 0; i < Math.floor(Float.parseFloat(rating)); i++) {
-                System.out.print("\u2B50");
-            }
+            InputStream input = new URL(urlImagem).openStream();
 
-            System.out.println();
-            System.out.println();
+            geradora.cria(input, nomeArquivo);
+
+            System.out.println("Título: \033[1m" + titulo + "\033[0m");
         }
 
     }
