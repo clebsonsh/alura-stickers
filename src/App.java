@@ -1,71 +1,42 @@
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 public class App {
     public static void main(String[] args) throws Exception {
+//         Fazer um conexão HTTP e buscar os filmes mais populares
 
-        // Pega a API_KEY do arquivo env.properties
-        Properties prop = new Properties();
+//         Api do imdb esta forá do ar
+//        ApiKey apiKey = new ApiKey();
+//        String API_KEY = apiKey.getApiKey();
+//         String url = "https://imdb-api.com/en/API/MostPopularMovies/" + API_KEY;
 
-        try (InputStream input = new FileInputStream("env.properties")) {
+//         Usando um API imdb alternativa por hora
+//        String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java/api/TopMovies.json";
+//        ExtratorDeConteudo extrator = new ExtratorDeConteudoDoImdb();
 
-            // load a properties file
-            prop.load(input);
+//         Usando API da NASA
+        String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java/api/NASA-APOD-JamesWebbSpaceTelescope.json";
+        ExtratorDeConteudo extrator = new ExtratorDeConteudoDaNasa();
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//         Faz o GET dos dados da API
 
-        String API_KEY = prop.getProperty("API_KEY");
+        ClienteHttp clienteHttp = new ClienteHttp();
+        String json = clienteHttp.buscaDados(url);
 
-        // Fazer um conexão HTTP e buscar os filmes mais populares
-        // Gerar uma URI como o path da API + a API_KEY
+        List<Conteudo> conteudos =  extrator.extraiConteudos(json);
 
-        // Api do imdb esta forá do ar
-        // String url = "https://imdb-api.com/en/API/MostPopularMovies/";
-        // URI endereco = URI.create(url + API_KEY);
-
-        // Usando um API alternativa por hora
-        String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java/api/TopMovies.json";
-        URI endereco = URI.create(url);
-
-        // Faz o GET dos dados da API
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder(endereco).GET().build();
-        HttpResponse<String> response = client.send(request,
-                BodyHandlers.ofString());
-        String body = response.body();
-
-        // Monstra os dados retornados da API no console
-        // System.out.println(body);
-
-        // Extrair só os dados que interessam (titulo, poster, classificação)
-        JsonParser parser = new JsonParser();
-        List<Map<String, String>> listaDeFilmes = parser.parse(body);
-
-        // Exibir e manipular os dados
+//         Exibir e manipular os dados
         var geradora = new GeradoraDeFigurinhas();
-        for (Map<String, String> filme : listaDeFilmes) {
-            String titulo = filme.get("title");
 
-            String urlImagem = filme.get("image");
-            String nomeArquivo = titulo + ".png";
+        for (Conteudo conteudo : conteudos) {
 
-            InputStream input = new URL(urlImagem).openStream();
+            String nomeArquivo = conteudo.getTitulo() + ".png";
+            InputStream input = new URL(conteudo.getUrlImagem()).openStream();
 
             geradora.cria(input, nomeArquivo);
 
-            System.out.println("Título: \033[1m" + titulo + "\033[0m");
+            System.out.println("Título: \033[1m" + conteudo.getTitulo() + "\033[0m");
         }
 
     }

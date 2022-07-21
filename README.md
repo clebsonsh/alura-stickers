@@ -10,6 +10,6 @@ Esse APP usa a API do IMDb pra gerar Stickers par ao Whatsapp
 
 > `cp env.properties.example env.properties`
 
-- Abra o arquibo env.properties e coloque a sua API_KEY
+- Abra o arquivo env.properties e coloque a sua API_KEY
 
-... Até o momento o APP só pega os filmes mais populares e mostra na tela
+- Rode o APP, ele vai buscar os filmes na API e gerar as figurinhas
