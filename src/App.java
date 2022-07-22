@@ -31,12 +31,12 @@ public class App {
 
         for (Conteudo conteudo : conteudos) {
 
-            String nomeArquivo = conteudo.getTitulo() + ".png";
-            InputStream input = new URL(conteudo.getUrlImagem()).openStream();
+            String nomeArquivo = conteudo.titulo() + ".png";
+            InputStream input = new URL(conteudo.urlImagem()).openStream();
 
             geradora.cria(input, nomeArquivo);
 
-            System.out.println("Título: \033[1m" + conteudo.getTitulo() + "\033[0m");
+            System.out.println("Título: \033[1m" + conteudo.titulo() + "\033[0m");
         }
 
     }
